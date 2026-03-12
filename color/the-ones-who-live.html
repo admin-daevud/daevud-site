@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="google-site-verification" content="KWHEJtSq8sWa2G2rxJUnN9VICj7_CzYNBsGhz5zTIVU" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMC The Walking Dead: The Ones Who Live | David Taylor</title>
+  <meta name="description" content="Color work by David Taylor — AMC The Walking Dead: The Ones Who Live">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .color-project {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .color-project.visible { opacity: 1; transform: translateY(0); }
+    .video-wrapper:hover .video-thumbnail { transform: scale(1.02); }
+    .video-wrapper .video-thumbnail { transition: opacity 0.3s ease, transform 0.5s ease; }
+    .video-wrapper.playing .video-thumbnail { opacity: 0; }
+    .video-wrapper.playing .play-btn { opacity: 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="site-title">David Taylor</a>
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+  <nav class="nav-menu">
+    <a href="../color.html">Color</a>
+    <a href="../finishing.html">Finishing</a>
+    <a href="../about.html">About</a>
+  </nav>
+  <div class="nav-overlay"></div>
+
+  <main class="page-content">
+    <div class="color-page">
+      <div class="color-project">
+        <div class="video-wrapper">
+          <img class="video-thumb-sizer" src="https://media.daevud.com/file/daevud/amc-the-ones-who-live-together-trailer-thumbnail.jpg" alt="">
+          <video src="https://media.daevud.com/file/daevud/amc-the-ones-who-live-together-trailer.mp4" preload="none" playsinline oncontextmenu="return false;"></video>
+          <img class="video-thumbnail" src="https://media.daevud.com/file/daevud/amc-the-ones-who-live-together-trailer-thumbnail.jpg" alt="AMC The Walking Dead, The Ones Who Live" loading="lazy">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        </div>
+        <div class="project-info">
+          <p class="project-title">AMC The Walking Dead, The Ones Who Live</p>
+          <p class="project-subtitle">Season 1 Trailer "Together"</p>
+          <p class="project-credits">Editor: Ben Holmes, Producers: Joey Carole / Eleanor Blake. Trailer produced before show was finished, all shots color corrected by me for trailer.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/daevud/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/david-taylor-09aa446" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="mailto:daevud@gmail.com" aria-label="Contact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </a>
+    </div>
+    <p>&copy; All rights reserved</p>
+  </footer>
+
+  <script src="../nav.js"></script>
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.color-project').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
