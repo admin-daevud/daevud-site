@@ -93,23 +93,6 @@
       });
     }, { threshold: 0.08 });
     document.querySelectorAll('.color-project').forEach(el => observer.observe(el));
-
-    document.querySelectorAll('.video-wrapper').forEach(wrapper => {
-      const video = wrapper.querySelector('video');
-      wrapper.addEventListener('click', () => {
-        if (wrapper.classList.contains('playing')) {
-          video.pause();
-          wrapper.classList.remove('playing');
-        } else {
-          document.querySelectorAll('.video-wrapper.playing').forEach(other => {
-            other.querySelector('video').pause();
-            other.classList.remove('playing');
-          });
-          video.play();
-          wrapper.classList.add('playing');
-        }
-      });
-    });
   </script>
 </body>
 </html>
