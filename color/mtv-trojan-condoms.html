@@ -15,10 +15,73 @@
       transition: opacity 0.55s ease, transform 0.55s ease;
     }
     .color-project.visible { opacity: 1; transform: translateY(0); }
-    .video-wrapper:hover .video-thumbnail { transform: scale(1.02); }
-    .video-wrapper .video-thumbnail { transition: opacity 0.3s ease, transform 0.5s ease; }
-    .video-wrapper.playing .video-thumbnail { opacity: 0; }
-    .video-wrapper.playing .play-btn { opacity: 0; }
+
+    /* Thumbnail tile — no inline video */
+    .thumb-wrapper {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 16 / 9;
+    }
+    .thumb-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .thumb-wrapper:hover img { transform: scale(1.02); }
+    .thumb-wrapper .play-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 58px; height: 58px;
+      background: rgba(0,0,0,0.55);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: background 0.2s;
+    }
+    .thumb-wrapper:hover .play-btn { background: rgba(0,0,0,0.75); }
+    .thumb-wrapper .play-btn svg { width: 20px; height: 20px; fill: white; margin-left: 4px; }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.92);
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-inner {
+      position: relative;
+      width: min(90vw, 56.25vh);
+    }
+    .lightbox-inner video {
+      width: 100%;
+      display: block;
+      aspect-ratio: 9 / 16;
+      background: #000;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: -36px; right: 0;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .lightbox-close:hover { opacity: 1; }
   </style>
 </head>
 <body>
@@ -40,10 +103,8 @@
     <div class="color-page">
 
       <div class="color-project">
-        <div class="video-wrapper">
-          <img class="video-thumb-sizer" src="https://media.daevud.com/file/daevud/trojan_timelapse.jpg" alt="">
-          <video src="https://media.daevud.com/file/daevud/mtv-trojan-timelapse.mp4" preload="none" playsinline oncontextmenu="return false;"></video>
-          <img class="video-thumbnail" src="https://media.daevud.com/file/daevud/trojan_timelapse.jpg" alt="MTV Trojan Condoms — Time-Lapse" loading="lazy">
+        <div class="thumb-wrapper" data-video="https://media.daevud.com/file/daevud/mtv-trojan-timelapse.mp4">
+          <img src="https://media.daevud.com/file/daevud/trojan_timelapse.jpg" alt="MTV Trojan Condoms — Time-Lapse" loading="lazy">
           <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
         </div>
         <div class="project-info">
@@ -54,10 +115,8 @@
       </div>
 
       <div class="color-project">
-        <div class="video-wrapper">
-          <img class="video-thumb-sizer" src="https://media.daevud.com/file/daevud/trojan-reverse.jpg" alt="">
-          <video src="https://media.daevud.com/file/daevud/mtv-trojan-reverse.mp4" preload="none" playsinline oncontextmenu="return false;"></video>
-          <img class="video-thumbnail" src="https://media.daevud.com/file/daevud/trojan-reverse.jpg" alt="MTV Trojan Condoms — Reverse" loading="lazy">
+        <div class="thumb-wrapper" data-video="https://media.daevud.com/file/daevud/mtv-trojan-reverse.mp4">
+          <img src="https://media.daevud.com/file/daevud/trojan-reverse.jpg" alt="MTV Trojan Condoms — Reverse" loading="lazy">
           <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
         </div>
         <div class="project-info">
@@ -69,6 +128,14 @@
 
     </div>
   </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lightbox-close">Close</button>
+      <video id="lightbox-video" playsinline controls oncontextmenu="return false;"></video>
+    </div>
+  </div>
 
   <footer>
     <div class="social-icons">
@@ -87,12 +154,40 @@
 
   <script src="../nav.js"></script>
   <script>
+    // Fade-in observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
       });
     }, { threshold: 0.08 });
     document.querySelectorAll('.color-project').forEach(el => observer.observe(el));
+
+    // Lightbox
+    const lightbox      = document.getElementById('lightbox');
+    const lightboxVideo = document.getElementById('lightbox-video');
+    const lightboxClose = document.getElementById('lightbox-close');
+
+    document.querySelectorAll('.thumb-wrapper').forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        lightboxVideo.src = thumb.dataset.video;
+        lightbox.classList.add('open');
+        lightboxVideo.play();
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightboxVideo.pause();
+      lightboxVideo.src = '';
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
   </script>
 </body>
 </html>
